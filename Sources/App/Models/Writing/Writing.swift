@@ -56,8 +56,4 @@ final class Writing: Model, Content {
                           modified: self.modified,
                           image: self.image)
     }
-    
-    func findIdx(_ idx: Int, on: Database) async throws -> Writing? {
-        try await self
-    }
 }

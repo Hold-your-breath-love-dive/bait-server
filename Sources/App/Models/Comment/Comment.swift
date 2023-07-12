@@ -7,6 +7,12 @@ final class Comment: Model, Content {
     @ID(key: .id)
     var id: UUID?
 
+    @Field(key: "parentId")
+    var parentId: Int
+    
+    @Field(key: "idx")
+    var idx: Int?
+    
     @Field(key: "name")
     var name: String
     
@@ -18,7 +24,6 @@ final class Comment: Model, Content {
     
     @Timestamp(key: "createDate", on: .create, format: .iso8601)
     var createDate: Date?
-
 
     init() { }
 
@@ -44,9 +49,5 @@ final class Comment: Model, Content {
                           createDate: self.createDate ?? Date(),
                           modified: self.modified,
                           image: self.image)
-    }
-    
-    func findIdx(_ idx: Int, on: Database) async throws -> Writing? {
-        try await self
     }
 }
