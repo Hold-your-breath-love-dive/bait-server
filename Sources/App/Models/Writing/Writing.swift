@@ -47,8 +47,14 @@ final class Writing: Model, Content {
         self.image = image
     }
     
-    func toDTO() -> GetWriting {
+    func toDTO(on: Database) async throws -> GetWriting {
+        let commentCount = try await Comment
+            .query(on: on)
+            .filter(\.$parentId == self.idx ?? 0)
+            .all()
+            .count
         return GetWriting(id: self.idx ?? 0,
+                          commentCount: commentCount,
                           name: self.name,
                           title: self.title,
                           content: self.content,

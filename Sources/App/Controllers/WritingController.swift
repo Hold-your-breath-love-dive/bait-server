@@ -23,17 +23,21 @@ struct WritingController: RouteCollection {
             .query(on: req.db)
             .filter(\.$idx == idInt)
             .first() {
-            return writing.toDTO()
+            return try await writing.toDTO(on: req.db)
         } else {
             throw Abort(.notFound)
         }
     }
 
     func getList(req: Request) async throws -> [GetWriting] {
-        try await Writing.query(on: req.db)
+        var writing = try await Writing.query(on: req.db)
             .sort(\.$createDate, .descending)
             .all()
-            .map { $0.toDTO() }
+        var temp = [GetWriting]()
+        for idx in 0..<writing.count {
+            temp.append(try await writing[idx].toDTO(on: req.db))
+        }
+        return temp
     }
 
     func post(req: Request) async throws -> HTTPStatus {

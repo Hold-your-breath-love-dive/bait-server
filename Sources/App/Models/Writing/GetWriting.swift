@@ -1,7 +1,7 @@
 import Vapor
 
 struct GetWriting: Content {
-    let id: Int
+    let id, commentCount: Int
     let name, title, content: String
     let createDate: Date
     let modified: Bool
