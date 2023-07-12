@@ -27,27 +27,20 @@ final class Comment: Model, Content {
 
     init() { }
 
-    init(name: String,
+    init(parentId: Int,
+         name: String,
          password: String,
-         title: String,
-         content: String,
-         modified: Bool = false,
-         image: String?) {
+         content: String) {
+        self.parentId = parentId
         self.name = name
         self.password = password
-        self.title = title
         self.content = content
-        self.modified = modified
-        self.image = image
     }
     
-    func toDTO() -> GetWriting {
-        return GetWriting(id: self.idx ?? 0,
+    func toDTO() -> GetComment {
+        return GetComment(id: self.idx ?? 0,
                           name: self.name,
-                          title: self.title,
                           content: self.content,
-                          createDate: self.createDate ?? Date(),
-                          modified: self.modified,
-                          image: self.image)
+                          createDate: self.createDate ?? Date())
     }
 }

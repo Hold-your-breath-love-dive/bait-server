@@ -1,8 +1,5 @@
-//
-//  File.swift
-//  
-//
-//  Created by Mercen on 2023/07/12.
-//
+import Vapor
 
-import Foundation
+struct PostComment: Content {
+    let name, password, content: String
+}

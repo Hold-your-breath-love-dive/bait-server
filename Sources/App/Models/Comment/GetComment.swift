@@ -1,8 +1,7 @@
-//
-//  File.swift
-//  
-//
-//  Created by Mercen on 2023/07/12.
-//
+import Vapor
 
-import Foundation
+struct GetComment: Content {
+    let id: Int
+    let name, content: String
+    let createDate: Date
+}

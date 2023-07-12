@@ -8,4 +8,11 @@ struct CommentController: RouteCollection {
         comment.post(use: post)
         comment(":id").delete(use: delete)
     }
+    
+    func getList(req: Request) async throws -> [GetComment] {
+        try await Comment.query(on: req.db)
+            .sort(\.$createDate, .ascending)
+            .all()
+            .map { $0.toDTO() }
+    }
 }
