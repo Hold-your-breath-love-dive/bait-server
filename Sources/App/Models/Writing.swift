@@ -4,8 +4,8 @@ import Vapor
 final class Writing: Model, Content {
     static let schema = "writings"
     
-    @ID(key: .id)
-    var id: UUID?
+    @ID(custom: "id", generatedBy: .database)
+    var id: Int?
 
     @Field(key: "name")
     var name: String
@@ -30,7 +30,7 @@ final class Writing: Model, Content {
 
     init() { }
 
-    init(id: UUID? = nil,
+    init(id: Int,
          name: String,
          password: String,
          title: String,
@@ -46,5 +46,15 @@ final class Writing: Model, Content {
         self.createDate = createDate
         self.modifyDate = modifyDate
         self.image = image
+    }
+    
+    func toDTO() -> GetWriting {
+        return GetWriting(id: self.id ?? 0,
+                          name: self.name,
+                          title: self.title,
+                          content: self.content,
+                          createDate: self.createDate ?? Date(),
+                          modifyDate: self.modifyDate,
+                          image: self.image)
     }
 }
