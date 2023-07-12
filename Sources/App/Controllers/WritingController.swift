@@ -29,7 +29,12 @@ struct WritingController: RouteCollection {
 
     func post(req: Request) async throws -> HTTPStatus {
         let param = try req.content.decode(PostWriting.self)
-        try await param.toModel().save(on: req.db)
+        let writing = Writing(name: param.name,
+                              password: param.password,
+                              title: param.title,
+                              content: param.content,
+                              image: param.image)
+        try await writing.save(on: req.db)
         return .noContent
     }
 
@@ -39,7 +44,10 @@ struct WritingController: RouteCollection {
             throw Abort(.notFound)
         }
         if param.password == writing.password {
-            //patch
+            writing.name = param.name
+            writing.title = param.title
+            writing.content = param.content
+            writing.image = param.image
         } else {
             throw Abort(.badRequest)
         }
