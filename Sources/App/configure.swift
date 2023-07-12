@@ -18,6 +18,7 @@ public func configure(_ app: Application) async throws {
     ), as: .mysql)
 
     app.migrations.add(CreateWriting())
+    app.migrations.add(CreateComment())
 
     // register routes
     try routes(app)

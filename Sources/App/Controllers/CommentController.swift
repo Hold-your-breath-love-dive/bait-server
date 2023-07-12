@@ -5,7 +5,7 @@ struct CommentController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let comment = routes.grouped("comment")
         comment.get(":parentId", use: getList)
-        comment.post(use: post)
+        comment.post(":parentId", use: post)
         comment.delete(":id", use: delete)
     }
     
@@ -25,7 +25,7 @@ struct CommentController: RouteCollection {
     
     func post(req: Request) async throws -> HTTPStatus {
         let param = try req.content.decode(PostComment.self)
-        guard let id = req.parameters.get("id"),
+        guard let id = req.parameters.get("parentId"),
               let idInt = Int(id)
         else {
             throw Abort(.badRequest)

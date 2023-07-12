@@ -30,7 +30,7 @@ struct WritingController: RouteCollection {
     }
 
     func getList(req: Request) async throws -> [GetWriting] {
-        var writing = try await Writing.query(on: req.db)
+        let writing = try await Writing.query(on: req.db)
             .sort(\.$createDate, .descending)
             .all()
         var temp = [GetWriting]()
