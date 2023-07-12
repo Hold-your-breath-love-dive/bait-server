@@ -30,13 +30,13 @@ final class Writing: Model, Content {
 
     init() { }
 
-    init(id: Int,
+    init(id: Int? = nil,
          name: String,
          password: String,
          title: String,
          content: String,
-         createDate: Date?,
-         modifyDate: Date?,
+         createDate: Date? = nil,
+         modifyDate: Date? = nil,
          image: String?) {
         self.id = id
         self.name = name

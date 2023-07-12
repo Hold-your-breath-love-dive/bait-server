@@ -3,29 +3,59 @@ import Vapor
 
 struct WritingController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
-        let writings = routes.grouped("writings")
-        writings.get(use: index)
-        writings.post(use: create)
-        writings.group(":writingID") { writing in
-            writing.delete(use: delete)
+        let writing = routes.grouped("writing")
+        writing.get(use: getList)
+        writing.post(use: post)
+        writing.group(":id") { writingID in
+            writingID.get(use: getOne)
+            writingID.put(use: put)
+            writingID.delete(use: delete)
         }
     }
-
-    func index(req: Request) async throws -> [Writing] {
-        try await Writing.query(on: req.db).all()
-    }
-
-    func create(req: Request) async throws -> Writing {
-        let writing = try req.content.decode(Writing.self)
-        try await writing.save(on: req.db)
-        return writing
-    }
-
-    func delete(req: Request) async throws -> HTTPStatus {
-        guard let writing = try await Writing.find(req.parameters.get("writingID"), on: req.db) else {
+    
+    func getOne(req: Request) async throws -> GetWriting {
+        guard let writing = try await Writing.find(req.parameters.get("id"), on: req.db) else {
             throw Abort(.notFound)
         }
-        try await writing.delete(on: req.db)
+        return writing.toDTO()
+    }
+    
+    func getList(req: Request) async throws -> [GetWriting] {
+        try await Writing.query(on: req.db)
+            .sort(\.$createDate, .descending)
+            .all()
+            .map { $0.toDTO() }
+    }
+
+    func post(req: Request) async throws -> HTTPStatus {
+        let param = try req.content.decode(PostWriting.self)
+        try await param.toModel().save(on: req.db)
+        return .noContent
+    }
+
+    func put(req: Request) async throws -> HTTPStatus {
+        let param = try req.content.decode(PostWriting.self)
+        guard let writing = try await Writing.find(req.parameters.get("id"), on: req.db) else {
+            throw Abort(.notFound)
+        }
+        if param.password == writing.password {
+            //patch
+        } else {
+            throw Abort(.badRequest)
+        }
+        return .noContent
+    }
+    
+    func delete(req: Request) async throws -> HTTPStatus {
+        let param = try req.content.decode(PostWriting.self)
+        guard let writing = try await Writing.find(req.parameters.get("id"), on: req.db) else {
+            throw Abort(.notFound)
+        }
+        if param.password == writing.password {
+            try await writing.delete(on: req.db)
+        } else {
+            throw Abort(.badRequest)
+        }
         return .noContent
     }
 }
