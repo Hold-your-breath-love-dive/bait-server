@@ -1,3 +1,6 @@
+import Fluent
+import Vapor
+
 struct CommentController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let writing = routes.grouped("writing")
