@@ -5,7 +5,7 @@ struct WritingController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let writing = routes.grouped("writing")
         writing.get("list", use: getList)
-        writing.post(use: post)
+        writing.on(.POST, body: .collect(maxSize: "500mb"), use: post)
         writing.group(":id") { writingID in
             writingID.get(use: getOne)
             writingID.put(use: put)
@@ -78,7 +78,7 @@ struct WritingController: RouteCollection {
     }
     
     func delete(req: Request) async throws -> HTTPStatus {
-        let param = try req.content.decode(PostWriting.self)
+        let param = try req.content.decode(DeleteWriting.self)
         guard let id = req.parameters.get("id"),
               let idInt = Int(id)
         else {

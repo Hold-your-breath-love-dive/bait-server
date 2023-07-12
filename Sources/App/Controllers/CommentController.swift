@@ -39,7 +39,7 @@ struct CommentController: RouteCollection {
     }
     
     func delete(req: Request) async throws -> HTTPStatus {
-        let param = try req.content.decode(PostComment.self)
+        let param = try req.content.decode(DeleteComment.self)
         guard let id = req.parameters.get("id"),
               let idInt = Int(id)
         else {

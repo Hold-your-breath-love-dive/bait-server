@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "dive",
+    name: "bait",
     platforms: [
        .macOS(.v12)
     ],

@@ -13,7 +13,7 @@ public func configure(_ app: Application) async throws {
         port: Environment.get("DATABASE_PORT").flatMap(Int.init(_:)) ?? MySQLConfiguration.ianaPortNumber,
         username: Environment.get("DATABASE_USERNAME") ?? "root",
         password: Environment.get("DATABASE_PASSWORD") ?? "1234",
-        database: Environment.get("DATABASE_NAME") ?? "dive",
+        database: Environment.get("DATABASE_NAME") ?? "bait",
         tlsConfiguration: .forClient(certificateVerification: .none)
     ), as: .mysql)
 

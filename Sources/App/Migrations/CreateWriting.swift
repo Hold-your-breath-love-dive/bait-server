@@ -11,7 +11,7 @@ struct CreateWriting: AsyncMigration {
             .field("content", .string, .required)
             .field("createDate", .string, .required)
             .field("modified", .bool)
-            .field("image", .string)
+            .field("image", .custom("longtext"))
             .create()
     }
 
